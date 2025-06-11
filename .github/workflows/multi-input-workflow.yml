@@ -1,0 +1,32 @@
+name: Workflow with Multiple Inputs and Conditions
+
+on:
+  workflow_dispatch:
+    inputs:
+      name:
+        description: 'Your name'
+        required: true
+        default: 'Bhai'
+      environment:
+        description: 'Choose environment (dev, staging, prod)'
+        required: true
+        default: 'dev'
+
+jobs:
+  greet-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Greet the User
+        run: echo "👋 Hello, ${{ github.event.inputs.name }}!"
+
+      - name: Deploy to Dev
+        if: ${{ github.event.inputs.environment == 'dev' }}
+        run: echo "🚀 Deploying to Development Environment"
+
+      - name: Deploy to Staging
+        if: ${{ github.event.inputs.environment == 'staging' }}
+        run: echo "🚀 Deploying to Staging Environment"
+
+      - name: Deploy to Production
+        if: ${{ github.event.inputs.environment == 'prod' }}
+        run: echo "🚀 Deploying to Production Environment"
